@@ -40,25 +40,32 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Görsel veya URL gerekli" }, { status: 400 });
     }
 
-    const prompt = `Sen uzman bir UI/UX tasarım danışmanısın. Bu arayüz ekran görüntüsünü analiz et ve Türkçe olarak detaylı geri bildirim ver.
+    const prompt = `Sen kıdemli bir UI/UX tasarım danışmanısın. Bu arayüz ekran görüntüsünü profesyonelce analiz et ve Türkçe olarak detaylı geri bildirim ver.
 
 ${context ? `Bağlam: ${context}` : ""}
 
-Şu kategorilerde analiz yap:
+Şu kategorilerde kapsamlı analiz yap:
 
-1. **Genel Skor** (100 üzerinden): Kısa bir özet ve genel puan
-2. **Güçlü Yönler** (en az 3 madde): Ne iyi yapılmış?
-3. **Kritik Sorunlar** (varsa): Acil düzeltilmesi gerekenler
-4. **İyileştirme Önerileri** (en az 5 madde): Somut, uygulanabilir öneriler
-5. **Erişilebilirlik**: Renk kontrastı, font boyutu, tıklanabilir alan sorunları
-6. **Mobil Uyumluluk**: Responsive tasarım değerlendirmesi
+1. **Genel Skor** (100 üzerinden): Genel değerlendirme ve puan
+2. **Kategori Skorları** (her biri 100 üzerinden): Görsel Tasarım, Kullanılabilirlik, Erişilebilirlik, Mobil Uyumluluk
+3. **Güçlü Yönler** (en az 3 madde): Ne iyi yapılmış?
+4. **Kritik Sorunlar** (varsa): Acil düzeltilmesi gerekenler
+5. **İyileştirme Önerileri** (en az 5 madde): Somut, uygulanabilir öneriler
+6. **Erişilebilirlik**: Renk kontrastı, font boyutu, odak göstergeleri, ARIA
+7. **Mobil Uyumluluk**: Responsive tasarım, dokunma hedefleri, viewport
 
-Her madde için kısa ve net ol. Teknik terimler kullan ama açıkla.
+Her madde kısa ve net olsun. Teknik terimler kullan ama açıkla.
 
-Yanıtını şu JSON formatında ver:
+SADECE şu JSON formatında yanıt ver, başka hiçbir şey ekleme:
 {
   "score": 85,
   "summary": "...",
+  "category_scores": {
+    "visual": 88,
+    "usability": 82,
+    "accessibility": 70,
+    "mobile": 75
+  },
   "strengths": ["...", "...", "..."],
   "critical_issues": ["..."],
   "improvements": ["...", "...", "...", "...", "..."],
