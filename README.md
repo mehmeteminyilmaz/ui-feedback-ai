@@ -4,10 +4,11 @@
 
 **Arayüzünü yapay zeka gözüyle analiz et — saniyeler içinde uzman geri bildirimi al.**
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.2-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org)
-[![OpenRouter](https://img.shields.io/badge/OpenRouter-Vision_AI-7c3aed?style=for-the-badge)](https://openrouter.ai)
-[![License](https://img.shields.io/badge/Lisans-MIT-22c55e?style=for-the-badge)](LICENSE)
+[![Vercel Canlı Demo](https://img.shields.io/badge/🚀_Canlı_Demo-ui--feedback--ai.vercel.app-000000?style=for-the-badge&logo=vercel)](https://ui-feedback-ai.vercel.app)
+
+[![Next.js](https://img.shields.io/badge/Next.js-16.2-black?style=flat-square&logo=next.js)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
+[![OpenRouter](https://img.shields.io/badge/OpenRouter-Vision_AI-7c3aed?style=flat-square)](https://openrouter.ai)
 
 </div>
 
