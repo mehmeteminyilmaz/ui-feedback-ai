@@ -6,7 +6,7 @@ export async function analyzeImage(imageBase64: string, mimeType: string, prompt
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "google/gemini-2.0-flash-001",
+      model: "openrouter/free",
       temperature: 0.1,
       seed: 42,
       messages: [
