@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import puppeteer from "puppeteer";
 
+export const maxDuration = 60; // Vercel'de timeout süresini 60 saniyeye çıkarır
+
 export async function POST(req: NextRequest) {
   const { url } = await req.json();
   if (!url) return NextResponse.json({ error: "URL gerekli" }, { status: 400 });

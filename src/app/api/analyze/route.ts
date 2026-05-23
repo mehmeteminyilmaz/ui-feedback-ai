@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { analyzeImage } from "@/lib/openrouter";
 import sharp from "sharp";
 
+export const maxDuration = 60; // Vercel'de timeout süresini 60 saniyeye çıkarır
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
@@ -22,7 +24,8 @@ export async function POST(req: NextRequest) {
       imageData = compressedBuffer.toString("base64");
       mimeType = "image/jpeg";
     } else if (url) {
-      const screenshotRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/screenshot`, {
+      const origin = req.nextUrl.origin;
+      const screenshotRes = await fetch(`${origin}/api/screenshot`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url }),

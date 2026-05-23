@@ -85,6 +85,53 @@ const HOW = [
   { icon: "③", title: "Raporla", desc: "Kategorili skor + önerileri al" },
 ];
 
+const compressImage = (file: File): Promise<Blob> => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+        const maxDim = 1200;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          resolve(file);
+          return;
+        }
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              resolve(file);
+            }
+          },
+          "image/jpeg",
+          0.8
+        );
+      };
+      img.onerror = () => resolve(file);
+    };
+    reader.onerror = () => resolve(file);
+  });
+};
+
 export default function Home() {
   const [mode, setMode] = useState<"upload" | "url">("upload");
   const [url, setUrl] = useState("");
@@ -126,7 +173,10 @@ export default function Home() {
     setLoading(true); setError(null); setAnalysis(null);
     try {
       const fd = new FormData();
-      if (mode === "upload" && imageFile) fd.append("image", imageFile);
+      if (mode === "upload" && imageFile) {
+        const compressedBlob = await compressImage(imageFile);
+        fd.append("image", compressedBlob, "compressed_image.jpg");
+      }
       if (mode === "url") fd.append("url", url);
       if (context) fd.append("context", context);
       const res = await fetch("/api/analyze", { method: "POST", body: fd });

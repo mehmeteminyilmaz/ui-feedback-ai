@@ -43,3 +43,5 @@ next-env.d.ts
 # geçici test dosyaları
 test_openrouter.js
 scratch_free_models.js
+
+.vercel
