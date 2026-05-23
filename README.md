@@ -15,7 +15,7 @@
 
 ## 📌 Proje Hakkında
 
-**UI/UX Feedback AI**, bir arayüzün ekran görüntüsünü yükleyerek ya da web sitesi URL'si girerek yapay zeka destekli detaylı UI/UX analizi almanızı sağlayan bir araçtır.
+**UI/UX Feedback AI**, bir arayüzün ekran görüntüsünü yükleyerek ya da web sitesi URL'si girerek yapay zeka destekli detaylı UI/UX analizi almanızı sağlayan premium, modern ve yüksek performanslı bir araçtır.
 
 Proje; Next.js 16, TypeScript ve [OpenRouter](https://openrouter.ai) üzerindeki ücretsiz vision modellerini kullanır. Türkçe çıktı üretecek şekilde yapılandırılmıştır.
 
@@ -27,18 +27,24 @@ Proje; Next.js 16, TypeScript ve [OpenRouter](https://openrouter.ai) üzerindeki
 |---|---|
 | 📁 **Görsel Yükleme** | PNG, JPG veya WebP formatında ekran görüntüsü yükle |
 | 🔗 **URL Analizi** | Puppeteer ile herhangi bir web sitesinin ekran görüntüsünü otomatik al |
+| 🗜️ **İstemci Tarafında Sıkıştırma (Yeni)** | Tarayıcıda (Canvas API) görseller otomatik olarak en fazla 1200px genişliğe yeniden boyutlandırılır ve %80 kalitede JPEG'e dönüştürülerek ultra hızlı yüklenir |
 | 🤖 **AI Analiz** | OpenRouter üzerinden ücretsiz vision modeliyle derinlemesine inceleme |
-| 📊 **Görsel Skor** | 100 üzerinden animasyonlu dairesel puan gösterimi |
-| 💡 **Somut Öneriler** | En az 5 uygulanabilir iyileştirme maddesi |
+| 📊 **Genel ve Kategori Skorları (Yeni)** | Genel puanın yanı sıra Görsel Tasarım, Kullanılabilirlik, Erişilebilirlik ve Mobil Uyumluluk için 4 ayrı animasyonlu kategori barı |
+| 💡 **Somut Öneriler** | Güçlü yönler, kritik sorunlar ve en az 5 uygulanabilir iyileştirme maddesi |
 | ♿ **Erişilebilirlik** | Renk kontrastı, font boyutu ve klavye navigasyonu tespiti |
 | 📱 **Mobil Uyumluluk** | Responsive tasarım değerlendirmesi |
-| 🗜️ **Otomatik Sıkıştırma** | `sharp` ile görseller API limitine sığacak şekilde optimize edilir |
+| 📋 **LinkedIn Uyumlu Rapor (Yeni)** | Tek tıkla analizi kopyalayıp LinkedIn veya diğer sosyal mecralarda doğrudan paylaşılmaya uygun formatta alma |
+| ⏳ **Vercel Uyumlu (Yeni)** | Vercel'deki 10 saniyelik ücretsiz limit aşımını (timeout) önlemek için sunucu tarafında 60 saniyelik maksimum süre yapılandırması |
 
 ---
 
-## 🖼️ Ekran Görüntüsü
+## 🖼️ Premium Arayüz
 
-> Uygulama koyu, glassmorphism temelli premium bir arayüze sahiptir. Animasyonlu blob arka plan, parlayan kart kenarlıkları ve dairesel skor halkası içerir.
+Uygulama koyu, glassmorphism temelli premium bir arayüze sahiptir.
+*   **Hero Bölümü:** Gradient başlıklar ve akıcı geçişler.
+*   **4'lü İstatistik Çubuğu:** Sistem analitiği hakkında anlık bilgi.
+*   **Animasyonlu Skor Halkaları ve Barlar:** Sonuçları anında görselleştiren dinamik grafikler.
+*   **Mikro Animasyonlar:** Hover efektleri ve akıcı scroll geçişleri.
 
 ---
 
@@ -80,21 +86,24 @@ Tarayıcında `http://localhost:3000` adresini aç.
 ## 🧠 Nasıl Çalışır?
 
 ```
-Kullanıcı                Next.js API          OpenRouter Vision AI
-   │                         │                        │
-   │── Görsel / URL ────────►│                        │
-   │                         │── sharp ile sıkıştır   │
-   │                         │── base64'e çevir        │
-   │                         │── API isteği ──────────►│
-   │                         │◄── JSON analiz ─────────│
-   │◄── Skor + Rapor ────────│                        │
+Kullanıcı             Tarayıcı (Canvas)          Next.js API           OpenRouter
+   │                         │                        │                    │
+   │── Görsel Seç ──────────►│                        │                    │
+   │                         │── Görseli Sıkıştır     │                    │
+   │                         │   (Maks 1200px, 150KB) │                    │
+   │                         │                        │                    │
+   │── İstek Gönder ─────────────────────────────────►│                    │
+   │                                                  │── API isteği ─────►│
+   │                                                  │◄── JSON analiz ────│
+   │◄── Rapor & Kategori Skorları ────────────────────│                    │
 ```
 
 1. Kullanıcı görsel yükler veya URL girer.
-2. **URL modunda:** Puppeteer ile sayfanın tam ekran görüntüsü alınır.
-3. Görsel `sharp` ile 1200px genişliğe yeniden boyutlandırılır ve JPEG olarak sıkıştırılır.
-4. OpenRouter'a gönderilen istek, ücretsiz vision modellerinden birini (örn. NVIDIA Nemotron, Google Gemma) otomatik seçer.
-5. Model Türkçe JSON formatında analiz döndürür; uygulama bunu görsel kartlara dönüştürür.
+2. **Görsel modunda:** Büyük dosyalar yüklenmeden önce istemci tarafında Canvas ile hızlıca sıkıştırılır. Sunucuya sadece ~150KB boyutunda optimize görsel gider.
+3. **URL modunda:** Puppeteer ile sayfanın tam ekran görüntüsü alınır.
+4. Next.js API rotası görselleri işler ve OpenRouter'a aktarır.
+5. OpenRouter ücretsiz vision modellerinden birini otomatik seçer.
+6. Model Türkçe JSON formatında analiz döndürür; uygulama bunu görsel kartlara dönüştürür.
 
 ---
 
@@ -104,10 +113,10 @@ Kullanıcı                Next.js API          OpenRouter Vision AI
 ui-feedback-ai/
 ├── src/
 │   ├── app/
-│   │   ├── page.tsx                 # Ana sayfa (UI)
+│   │   ├── page.tsx                 # Ana sayfa (SaaS Seviyesi Premium UI ve Sıkıştırma)
 │   │   └── api/
-│   │       ├── analyze/route.ts     # Görsel analiz API uç noktası
-│   │       └── screenshot/route.ts  # Puppeteer ekran görüntüsü API'si
+│   │       ├── analyze/route.ts     # Analiz API uç noktası (Vercel maxDuration ayarlı)
+│   │       └── screenshot/route.ts  # Puppeteer ekran görüntüsü API'si (Vercel maxDuration ayarlı)
 │   └── lib/
 │       └── openrouter.ts            # OpenRouter API istemcisi
 ├── .env.local                       # Gizli ortam değişkenleri (repo'ya eklenmez)
@@ -123,7 +132,8 @@ ui-feedback-ai/
 - **[TypeScript](https://www.typescriptlang.org)** — Tip güvenliği
 - **[OpenRouter](https://openrouter.ai)** — Ücretsiz vision model yönlendiricisi
 - **[Puppeteer](https://pptr.dev)** — Headless tarayıcı ile ekran görüntüsü
-- **[Sharp](https://sharp.pixelplumbing.com)** — Yüksek performanslı görsel işleme
+- **[Sharp](https://sharp.pixelplumbing.com)** — Yüksek performanslı sunucu tarafı görsel işleme
+- **Canvas API** — İstemci tarafında hızlı görsel ölçekleme ve sıkıştırma
 - **[Lucide React](https://lucide.dev)** — İkon kütüphanesi
 
 ---
@@ -131,7 +141,7 @@ ui-feedback-ai/
 ## 🔐 Güvenlik
 
 - `.env.local` dosyası `.gitignore`'a eklenmiştir; API anahtarın asla repoya dahil edilmez.
-- Yüklenen görseller sunucuya kaydedilmez; bellek üzerinde işlenip atılır.
+- Yüklenen görseller sunucuya kaydedilmez; bellek üzerinde işlenip anında imha edilir.
 
 ---
 
